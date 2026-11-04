@@ -2,7 +2,17 @@ import React, { useState } from 'react';
 import { AppView, ConfirmedDetails } from '../types';
 import { MEETING_ROOMS } from '../constants/initialData';
 import { addReservation } from '../services/storage';
-import { getTodayDateString, formatKoreanDateString, isToday } from '../utils/time';
+import {
+  getTodayDateString,
+  formatKoreanDateString,
+  isToday,
+  STANDARD_START_TIMES,
+  FIRST_BOOKING_TIME,
+  calculateDurationText,
+  generateEndTimesForStart,
+  timeToMinutes,
+  minutesToTime,
+} from '../utils/time';
 
 interface NewReservationViewProps {
   onNavigate: (view: AppView) => void;
@@ -17,8 +27,8 @@ export const NewReservationView: React.FC<NewReservationViewProps> = ({
 }) => {
   const [selectedRoomId, setSelectedRoomId] = useState('room-1');
   const [selectedDate, setSelectedDate] = useState(() => getTodayDateString());
-  const [startTime, setStartTime] = useState('14:00');
-  const [endTime, setEndTime] = useState('15:30');
+  const [startTime, setStartTime] = useState(FIRST_BOOKING_TIME);
+  const [endTime, setEndTime] = useState('10:30');
   const [purpose, setPurpose] = useState('전사 제품 스프린트 리뷰');
   const [userName, setUserName] = useState('김민준');
   const [userDept, setUserDept] = useState('프로덕트 디자인팀');
@@ -60,7 +70,7 @@ export const NewReservationView: React.FC<NewReservationViewProps> = ({
         location: selectedRoom.location,
         date: selectedDate,
         timeRange: `${startTime} ~ ${endTime}`,
-        durationText: '총 1시간 30분 사용',
+        durationText: `총 ${calculateDurationText(startTime, endTime)} 사용`,
         userName: cleanUserName,
         userDept: cleanUserDept,
         purpose: cleanPurpose,
@@ -133,14 +143,11 @@ export const NewReservationView: React.FC<NewReservationViewProps> = ({
 
           {/* 4-Column Reservation Matrix Input Fields */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-            {/* Column 1: 회의실 선택 (회의실 전용) */}
+            {/* Column 1: 회의실 선택 */}
             <div className="flex flex-col gap-1.5 group">
-              <label className="text-[13px] font-semibold text-[#191c1e] flex items-center justify-between">
-                <span className="flex items-center gap-1.5">
-                  <span className="material-symbols-outlined text-[16px] text-[#006c4a]">domain</span>
-                  회의실 선택
-                </span>
-                <span className="text-[11px] text-[#45474b] font-normal">필수</span>
+              <label className="text-[13px] font-semibold text-[#191c1e] flex items-center gap-1.5 h-5">
+                <span className="material-symbols-outlined text-[16px] text-[#006c4a]">domain</span>
+                <span>회의실 선택</span>
               </label>
               <div className="relative">
                 <select
@@ -150,7 +157,7 @@ export const NewReservationView: React.FC<NewReservationViewProps> = ({
                 >
                   {MEETING_ROOMS.map((room) => (
                     <option key={room.id} value={room.id}>
-                      {room.name}
+                      {room.name} ({room.location})
                     </option>
                   ))}
                 </select>
@@ -158,19 +165,18 @@ export const NewReservationView: React.FC<NewReservationViewProps> = ({
                   unfold_more
                 </span>
               </div>
-              <span className="text-xs text-[#45474b] truncate">{selectedRoom.location}</span>
             </div>
 
-            {/* Column 2: 이용 날짜 입력 */}
+            {/* Column 2: 이용 희망 날짜 */}
             <div className="flex flex-col gap-1.5 group">
-              <label className="text-[13px] font-semibold text-[#191c1e] flex items-center justify-between">
+              <label className="text-[13px] font-semibold text-[#191c1e] flex items-center justify-between h-5">
                 <span className="flex items-center gap-1.5">
                   <span className="material-symbols-outlined text-[16px] text-[#006c4a]">calendar_today</span>
-                  이용 희망 날짜
+                  <span>이용 희망 날짜</span>
                 </span>
-                <span className="text-[11px] text-[#006c4a] font-semibold">
-                  {isToday(selectedDate) ? '오늘 선택됨' : '선택 일자'}
-                </span>
+                {isToday(selectedDate) && (
+                  <span className="text-[11px] text-[#006c4a] font-semibold">오늘</span>
+                )}
               </label>
               <div className="relative">
                 <input
@@ -180,51 +186,50 @@ export const NewReservationView: React.FC<NewReservationViewProps> = ({
                   className="w-full h-14 px-4 bg-[#f2f4f6] text-[#191c1e] font-bold text-[15px] rounded-xl focus:bg-white focus:ring-2 focus:ring-[#02060e] shadow-xs cursor-pointer transition-all border border-[#e6e8ea]"
                 />
               </div>
-              <span className="text-xs text-[#45474b] font-medium">
-                {formatKoreanDateString(selectedDate)}
-              </span>
             </div>
 
             {/* Column 3: 시작 시간 */}
             <div className="flex flex-col gap-1.5 group">
-              <label className="text-[13px] font-semibold text-[#191c1e] flex items-center justify-between">
-                <span className="flex items-center gap-1.5">
-                  <span className="material-symbols-outlined text-[16px] text-[#006c4a]">schedule</span>
-                  시작 시간
-                </span>
-                <span className="text-[11px] text-[#45474b] font-normal">30분 단위</span>
+              <label className="text-[13px] font-semibold text-[#191c1e] flex items-center gap-1.5 h-5">
+                <span className="material-symbols-outlined text-[16px] text-[#006c4a]">schedule</span>
+                <span>시작 시간</span>
               </label>
               <div className="relative">
                 <select
                   value={startTime}
-                  onChange={(e) => setStartTime(e.target.value)}
+                  onChange={(e) => {
+                    const newStart = e.target.value;
+                    setStartTime(newStart);
+                    const startMin = timeToMinutes(newStart);
+                    const currentEndMin = timeToMinutes(endTime);
+                    if (currentEndMin <= startMin) {
+                      setEndTime(minutesToTime(startMin + 90));
+                    }
+                  }}
                   className="w-full h-14 pl-4 pr-10 bg-[#f2f4f6] text-[#191c1e] font-bold text-[15px] rounded-xl focus:bg-white focus:ring-2 focus:ring-[#02060e] appearance-none cursor-pointer shadow-xs transition-all border border-[#e6e8ea]"
                 >
-                  <option value="11:00">11:00</option>
-                  <option value="11:30">11:30</option>
-                  <option value="13:00">13:00</option>
-                  <option value="13:30">13:30</option>
-                  <option value="14:00">14:00</option>
-                  <option value="14:30">14:30</option>
-                  <option value="15:00">15:00</option>
+                  {STANDARD_START_TIMES.map((t) => (
+                    <option key={t} value={t}>
+                      {t}
+                    </option>
+                  ))}
                 </select>
                 <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-[#45474b] pointer-events-none text-[20px]">
                   arrow_drop_down
                 </span>
               </div>
-              <span className="text-xs text-[#00714e] bg-[#85f8c4]/50 px-2 py-0.5 rounded w-fit font-semibold">
-                이용 가능 슬롯
-              </span>
             </div>
 
             {/* Column 4: 종료 시간 */}
             <div className="flex flex-col gap-1.5 group">
-              <label className="text-[13px] font-semibold text-[#191c1e] flex items-center justify-between">
+              <label className="text-[13px] font-semibold text-[#191c1e] flex items-center justify-between h-5">
                 <span className="flex items-center gap-1.5">
                   <span className="material-symbols-outlined text-[16px] text-[#006c4a]">update</span>
-                  종료 시간
+                  <span>종료 시간</span>
                 </span>
-                <span className="text-[11px] text-[#006c4a] font-semibold">총 1.5시간 이용</span>
+                <span className="text-[11px] text-[#006c4a] font-semibold">
+                  총 {calculateDurationText(startTime, endTime)} 이용
+                </span>
               </label>
               <div className="relative">
                 <select
@@ -232,17 +237,16 @@ export const NewReservationView: React.FC<NewReservationViewProps> = ({
                   onChange={(e) => setEndTime(e.target.value)}
                   className="w-full h-14 pl-4 pr-10 bg-[#f2f4f6] text-[#191c1e] font-bold text-[15px] rounded-xl focus:bg-white focus:ring-2 focus:ring-[#02060e] appearance-none cursor-pointer shadow-xs transition-all border border-[#e6e8ea]"
                 >
-                  <option value="14:30">14:30 (30분)</option>
-                  <option value="15:00">15:00 (1.0시간)</option>
-                  <option value="15:30">15:30 (1.5시간)</option>
-                  <option value="16:00">16:00 (2.0시간)</option>
-                  <option value="17:00">17:00 (3.0시간)</option>
+                  {generateEndTimesForStart(startTime).map((opt) => (
+                    <option key={opt.value} value={opt.value}>
+                      {opt.label}
+                    </option>
+                  ))}
                 </select>
                 <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-[#45474b] pointer-events-none text-[20px]">
                   arrow_drop_down
                 </span>
               </div>
-              <span className="text-xs text-[#45474b]">연속 3시간까지 연장 가능</span>
             </div>
           </div>
 
@@ -315,33 +319,42 @@ export const NewReservationView: React.FC<NewReservationViewProps> = ({
               </div>
             </div>
 
-            {/* 30-min Block Grid Scrubber (Horizontal scroll on mobile) */}
+            {/* 30-min Block Grid Scrubber (Horizontal scroll on mobile, starts from 09:00) */}
             <div className="overflow-x-auto pb-2 -mx-1 px-1 sm:mx-0 sm:px-0">
-              <div className="min-w-[580px] grid grid-cols-10 gap-1.5 w-full select-none">
-                <div className="h-8 rounded bg-[#e0e3e5] flex items-center justify-center text-[11px] text-[#45474b]/70 font-mono">
-                  12:00
-                </div>
-                <div className="h-8 rounded bg-[#e0e3e5] flex items-center justify-center text-[11px] text-[#45474b]/70 font-mono">
-                  12:30
-                </div>
-                <div className="h-8 rounded bg-white shadow-xs flex items-center justify-center text-[11px] text-[#45474b] font-mono border border-[#e6e8ea]">
-                  13:00
-                </div>
-                <div className="h-8 rounded bg-white shadow-xs flex items-center justify-center text-[11px] text-[#45474b] font-mono border border-[#e6e8ea]">
-                  13:30
-                </div>
-                <div className="h-8 rounded bg-[#02060e] text-white flex items-center justify-center text-[11px] font-bold shadow-md col-span-3">
-                  14:00 - 15:30 (내 예약 확정 구간)
-                </div>
-                <div className="h-8 rounded bg-white shadow-xs flex items-center justify-center text-[11px] text-[#45474b] font-mono border border-[#e6e8ea]">
-                  15:30
-                </div>
-                <div className="h-8 rounded bg-[#e0e3e5] flex items-center justify-center text-[11px] text-[#45474b]/70 font-mono">
-                  16:00
-                </div>
-                <div className="h-8 rounded bg-white shadow-xs flex items-center justify-center text-[11px] text-[#45474b] font-mono border border-[#e6e8ea]">
-                  16:30
-                </div>
+              <div className="min-w-[680px] flex items-center gap-1.5 w-full select-none py-1">
+                {['09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00', '17:30', '18:00'].map((slotTime) => {
+                  const sMin = timeToMinutes(slotTime);
+                  const startMin = timeToMinutes(startTime);
+                  const endMin = timeToMinutes(endTime);
+                  const isSelected = sMin >= startMin && sMin < endMin;
+
+                  return (
+                    <button
+                      key={slotTime}
+                      type="button"
+                      onClick={() => {
+                        setStartTime(slotTime);
+                        if (endMin <= sMin) {
+                          setEndTime(minutesToTime(sMin + 90));
+                        }
+                      }}
+                      className={`h-9 px-2.5 rounded-lg flex items-center justify-center text-[11px] font-mono transition-all shrink-0 cursor-pointer ${
+                        isSelected
+                          ? 'bg-[#02060e] text-white font-bold shadow-md ring-2 ring-[#006c4a]'
+                          : 'bg-white hover:bg-[#eceef0] text-[#45474b] border border-[#e6e8ea] shadow-xs'
+                      }`}
+                      title={`${slotTime} 시작 슬롯 선택`}
+                    >
+                      {slotTime}
+                    </button>
+                  );
+                })}
+              </div>
+              <div className="mt-2 text-xs text-[#006c4a] font-semibold flex items-center gap-1.5 pl-0.5">
+                <span className="material-symbols-outlined text-[16px]">check_circle</span>
+                <span>
+                  선택 확정 구간: <strong className="text-[#191c1e]">{startTime} ~ {endTime}</strong> ({calculateDurationText(startTime, endTime)} 이용)
+                </span>
               </div>
             </div>
           </div>

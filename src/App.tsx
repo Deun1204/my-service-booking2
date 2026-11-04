@@ -80,7 +80,7 @@ export default function App() {
   const [modalResourceId, setModalResourceId] = useState('room-2');
   const [modalResourceName, setModalResourceName] = useState('소회의실 A (4인실)');
   const [modalResourceLocation, setModalResourceLocation] = useState('3층 우측 회의존');
-  const [modalInitialSlot, setModalInitialSlot] = useState('14:00 ~ 15:00');
+  const [modalInitialSlot, setModalInitialSlot] = useState('09:00 ~ 10:00');
 
   // Confirmed details for Screen 3
   const [confirmedDetails, setConfirmedDetails] = useState<ConfirmedDetails>({

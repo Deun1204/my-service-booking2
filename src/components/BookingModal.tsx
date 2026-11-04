@@ -1,4 +1,12 @@
 import React, { useState } from 'react';
+import {
+  STANDARD_START_TIMES,
+  FIRST_BOOKING_TIME,
+  calculateDurationText,
+  generateEndTimesForStart,
+  timeToMinutes,
+  minutesToTime,
+} from '../utils/time';
 
 interface BookingModalProps {
   isOpen: boolean;
@@ -11,7 +19,7 @@ interface BookingModalProps {
 export const BookingModal: React.FC<BookingModalProps> = ({
   isOpen,
   resourceName,
-  initialSlot = '14:00 ~ 15:00',
+  initialSlot = '09:00 ~ 10:00',
   onClose,
   onConfirm,
 }) => {
@@ -53,27 +61,27 @@ export const BookingModal: React.FC<BookingModalProps> = ({
           <div className="grid grid-cols-2 gap-2">
             <button
               type="button"
-              onClick={() => setSelectedSlot('14:00 ~ 15:00')}
+              onClick={() => setSelectedSlot('09:00 ~ 10:00')}
               className={`p-3 rounded-xl flex flex-col items-center gap-1 transition-all active:scale-95 shadow-xs ${
-                selectedSlot === '14:00 ~ 15:00'
+                selectedSlot === '09:00 ~ 10:00'
                   ? 'bg-[#02060e] text-white'
                   : 'bg-[#f2f4f6] text-[#191c1e] hover:bg-[#eceef0]'
               }`}
             >
-              <span className="font-bold text-sm">14:00 ~ 15:00</span>
-              <span className="text-[11px] opacity-80">지금 바로 (1시간)</span>
+              <span className="font-bold text-sm">09:00 ~ 10:00</span>
+              <span className="text-[11px] opacity-80">첫 슬롯 (1시간)</span>
             </button>
 
             <button
               type="button"
-              onClick={() => setSelectedSlot('15:00 ~ 16:00')}
+              onClick={() => setSelectedSlot('10:00 ~ 11:00')}
               className={`p-3 rounded-xl flex flex-col items-center gap-1 transition-all active:scale-95 shadow-xs ${
-                selectedSlot === '15:00 ~ 16:00'
+                selectedSlot === '10:00 ~ 11:00'
                   ? 'bg-[#02060e] text-white'
                   : 'bg-[#f2f4f6] text-[#191c1e] hover:bg-[#eceef0]'
               }`}
             >
-              <span className="font-bold text-sm">15:00 ~ 16:00</span>
+              <span className="font-bold text-sm">10:00 ~ 11:00</span>
               <span className="text-[11px] text-[#45474b]">다음 슬롯 (1시간)</span>
             </button>
           </div>
@@ -141,8 +149,8 @@ export const CustomScheduleModal: React.FC<CustomScheduleModalProps> = ({
 
   const dateOptions = [0, 1, 2, 3].map(getDateOption);
   const [selectedDateLabel, setSelectedDateLabel] = useState(() => dateOptions[0].value);
-  const [startTime, setStartTime] = useState('14:00');
-  const [endTime, setEndTime] = useState('15:30');
+  const [startTime, setStartTime] = useState(FIRST_BOOKING_TIME);
+  const [endTime, setEndTime] = useState('10:30');
 
   if (!isOpen) return null;
 
@@ -209,7 +217,7 @@ export const CustomScheduleModal: React.FC<CustomScheduleModalProps> = ({
           <div className="flex items-center justify-between">
             <label className="text-xs font-semibold text-[#191c1e]">2. 시작 시간 ~ 종료 시간 설정</label>
             <span className="text-[11px] text-[#45474b]">
-              총 이용 시간: <strong className="text-[#006c4a] font-bold">1시간 30분</strong>
+              총 이용 시간: <strong className="text-[#006c4a] font-bold">{calculateDurationText(startTime, endTime)}</strong>
             </span>
           </div>
 
@@ -218,10 +226,18 @@ export const CustomScheduleModal: React.FC<CustomScheduleModalProps> = ({
               <span className="text-[11px] text-[#45474b]">대여 시작</span>
               <select
                 value={startTime}
-                onChange={(e) => setStartTime(e.target.value)}
+                onChange={(e) => {
+                  const newStart = e.target.value;
+                  setStartTime(newStart);
+                  const startMin = timeToMinutes(newStart);
+                  const currentEndMin = timeToMinutes(endTime);
+                  if (currentEndMin <= startMin) {
+                    setEndTime(minutesToTime(startMin + 90));
+                  }
+                }}
                 className="w-full h-11 px-3 bg-white text-[#191c1e] font-semibold text-xs rounded-xl border border-[#e6e8ea] shadow-xs cursor-pointer"
               >
-                {['09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00'].map((t) => (
+                {STANDARD_START_TIMES.map((t) => (
                   <option key={t} value={t}>{t}</option>
                 ))}
               </select>
@@ -234,8 +250,8 @@ export const CustomScheduleModal: React.FC<CustomScheduleModalProps> = ({
                 onChange={(e) => setEndTime(e.target.value)}
                 className="w-full h-11 px-3 bg-white text-[#191c1e] font-semibold text-xs rounded-xl border border-[#e6e8ea] shadow-xs cursor-pointer"
               >
-                {['10:00', '11:00', '12:00', '13:00', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00', '17:30', '18:00'].map((t) => (
-                  <option key={t} value={t}>{t}</option>
+                {generateEndTimesForStart(startTime).map((opt) => (
+                  <option key={opt.value} value={opt.value}>{opt.label}</option>
                 ))}
               </select>
             </div>

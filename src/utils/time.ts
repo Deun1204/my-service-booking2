@@ -4,6 +4,47 @@ export const BUSINESS_START_HOUR = 9;  // 09:00
 export const BUSINESS_END_HOUR = 19;   // 19:00
 export const SLOT_DURATION_MINUTES = 30;
 
+export const FIRST_BOOKING_TIME = '09:00';
+
+export const STANDARD_START_TIMES: string[] = [
+  '09:00', '09:30', '10:00', '10:30', '11:00', '11:30',
+  '12:00', '12:30', '13:00', '13:30', '14:00', '14:30',
+  '15:00', '15:30', '16:00', '16:30', '17:00', '17:30',
+  '18:00', '18:30', '19:00', '19:30', '20:00', '20:30'
+];
+
+export function calculateDurationText(startTime: string, endTime: string): string {
+  const [sh, sm] = startTime.split(':').map(Number);
+  const [eh, em] = endTime.split(':').map(Number);
+  const diffMinutes = (eh * 60 + em) - (sh * 60 + sm);
+  if (diffMinutes <= 0) return '30분';
+  const hours = Math.floor(diffMinutes / 60);
+  const mins = diffMinutes % 60;
+  if (hours > 0 && mins > 0) return `${hours}시간 ${mins}분`;
+  if (hours > 0) return `${hours}시간`;
+  return `${mins}분`;
+}
+
+export function generateEndTimesForStart(start: string): { value: string; label: string }[] {
+  const [sh, sm] = start.split(':').map(Number);
+  const startMin = sh * 60 + sm;
+  const options: { value: string; label: string }[] = [];
+  for (let offset = 30; offset <= 240; offset += 30) {
+    const endMin = startMin + offset;
+    if (endMin > 22 * 60) break;
+    const eh = Math.floor(endMin / 60);
+    const em = endMin % 60;
+    const timeStr = `${String(eh).padStart(2, '0')}:${String(em).padStart(2, '0')}`;
+    const hours = offset / 60;
+    const durationLabel = hours >= 1 ? (hours % 1 === 0 ? `${hours}시간` : `${hours}시간`) : `${offset}분`;
+    options.push({
+      value: timeStr,
+      label: `${timeStr} (${durationLabel})`
+    });
+  }
+  return options;
+}
+
 export function timeToMinutes(timeStr: string): number {
   const [h, m] = timeStr.split(':').map(Number);
   return h * 60 + m;
