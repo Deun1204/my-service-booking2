@@ -27,7 +27,7 @@ export const ConflictResolutionView: React.FC<ConflictResolutionViewProps> = ({
   };
 
   return (
-    <div className="p-8 max-w-7xl mx-auto w-full flex flex-col gap-6">
+    <div className="p-3 sm:p-6 md:p-8 max-w-7xl mx-auto w-full flex flex-col gap-5 sm:gap-6">
       {/* Breadcrumb & Status Navigation */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2 text-xs font-semibold text-[#45474b]">

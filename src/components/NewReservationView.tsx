@@ -74,20 +74,20 @@ export const NewReservationView: React.FC<NewReservationViewProps> = ({
   };
 
   return (
-    <div className="w-full px-8 py-6 flex flex-col gap-6 max-w-7xl mx-auto">
-      {/* Top Action Breadcrumb & Title Context: Unified to '회의실 예약' */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-2">
+    <div className="w-full px-3 sm:px-6 md:px-8 py-3 sm:py-6 flex flex-col gap-5 sm:gap-6 max-w-7xl mx-auto">
+      {/* Top Action Breadcrumb & Title Context */}
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2.5">
         <div className="flex flex-col gap-1">
           <div className="flex items-center gap-1.5 text-[#45474b] text-[11px] tracking-wide">
             <span>회의실 예약</span>
             <span className="material-symbols-outlined text-[14px]">chevron_right</span>
             <span className="text-[#02060e] font-semibold text-xs">신규 회의실 예약</span>
           </div>
-          <h1 className="text-[28px] font-bold text-[#191c1e] tracking-tight">회의실 예약</h1>
+          <h1 className="text-[22px] sm:text-[28px] font-bold text-[#191c1e] tracking-tight">회의실 예약</h1>
         </div>
 
-        <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2 bg-[#f2f4f6] px-3.5 py-1.5 rounded-full shadow-xs">
+        <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
+          <div className="flex items-center gap-2 bg-[#f2f4f6] px-3 py-1.5 rounded-full shadow-xs">
             <span className="w-2.5 h-2.5 rounded-full bg-[#006c4a] animate-pulse"></span>
             <span className="text-[11px] text-[#45474b] font-medium">실시간 점유 엔진 가동 중</span>
           </div>
@@ -103,36 +103,36 @@ export const NewReservationView: React.FC<NewReservationViewProps> = ({
       </div>
 
       {/* 1순위: Unified Primary Reservation Card */}
-      <div className="w-full bg-white rounded-2xl shadow-xl p-8 relative overflow-hidden border border-[#e6e8ea]">
+      <div className="w-full bg-white rounded-2xl shadow-xl p-4 sm:p-6 md:p-8 relative overflow-hidden border border-[#e6e8ea]">
         {/* Ambient decorative gradient backdrop accent */}
         <div className="absolute -top-32 -right-32 w-80 h-80 bg-[#006c4a]/10 rounded-full blur-3xl pointer-events-none"></div>
         <div className="absolute top-1/2 -left-20 w-60 h-60 bg-[#dde3ef]/40 rounded-full blur-2xl pointer-events-none"></div>
 
-        <div className="relative z-10 flex flex-col gap-6">
+        <div className="relative z-10 flex flex-col gap-5 sm:gap-6">
           {/* Form Header Section */}
-          <div className="flex flex-col md:flex-row md:items-center justify-between pb-4 bg-[#f2f4f6]/60 p-4 rounded-xl gap-4">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-xl bg-[#02060e] flex items-center justify-center text-white shadow-md shrink-0">
-                <span className="material-symbols-outlined text-[26px]">meeting_room</span>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-3 sm:pb-4 bg-[#f2f4f6]/60 p-3 sm:p-4 rounded-xl gap-3 sm:gap-4">
+            <div className="flex items-center gap-3 sm:gap-4">
+              <div className="w-10 sm:w-12 h-10 sm:h-12 rounded-xl bg-[#02060e] flex items-center justify-center text-white shadow-md shrink-0">
+                <span className="material-symbols-outlined text-[22px] sm:text-[26px]">meeting_room</span>
               </div>
               <div>
-                <h2 className="text-[20px] font-bold text-[#191c1e] tracking-tight">
+                <h2 className="text-[17px] sm:text-[20px] font-bold text-[#191c1e] tracking-tight">
                   회의실 일정 및 대상 지정
                 </h2>
-                <p className="text-xs text-[#45474b] mt-0.5">
+                <p className="text-[11px] sm:text-xs text-[#45474b] mt-0.5">
                   최대 30분 단위로 즉시 슬롯이 배정되며 팀 캘린더와 동기화됩니다.
                 </p>
               </div>
             </div>
 
-            <div className="flex items-center gap-1.5 bg-[#e0e3e5] px-3.5 py-2 rounded-lg text-[#191c1e] text-[11px] font-semibold">
-              <span className="material-symbols-outlined text-[16px] text-[#006c4a]">verified_user</span>
+            <div className="flex items-center gap-1.5 bg-[#e0e3e5] px-3 py-1.5 rounded-lg text-[#191c1e] text-[11px] font-semibold self-start sm:self-auto shrink-0">
+              <span className="material-symbols-outlined text-[15px] text-[#006c4a]">verified_user</span>
               <span>중복 예약 방지 잠금 활성</span>
             </div>
           </div>
 
-          {/* 4-Column Reservation Matrix Input Fields: Strictly Meeting Rooms Only */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          {/* 4-Column Reservation Matrix Input Fields */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
             {/* Column 1: 회의실 선택 (회의실 전용) */}
             <div className="flex flex-col gap-1.5 group">
               <label className="text-[13px] font-semibold text-[#191c1e] flex items-center justify-between">
@@ -315,31 +315,33 @@ export const NewReservationView: React.FC<NewReservationViewProps> = ({
               </div>
             </div>
 
-            {/* 30-min Block Grid Scrubber */}
-            <div className="grid grid-cols-10 gap-1.5 w-full select-none">
-              <div className="h-8 rounded bg-[#e0e3e5] flex items-center justify-center text-[11px] text-[#45474b]/70 font-mono">
-                12:00
-              </div>
-              <div className="h-8 rounded bg-[#e0e3e5] flex items-center justify-center text-[11px] text-[#45474b]/70 font-mono">
-                12:30
-              </div>
-              <div className="h-8 rounded bg-white shadow-xs flex items-center justify-center text-[11px] text-[#45474b] font-mono border border-[#e6e8ea]">
-                13:00
-              </div>
-              <div className="h-8 rounded bg-white shadow-xs flex items-center justify-center text-[11px] text-[#45474b] font-mono border border-[#e6e8ea]">
-                13:30
-              </div>
-              <div className="h-8 rounded bg-[#02060e] text-white flex items-center justify-center text-[11px] font-bold shadow-md col-span-3">
-                14:00 - 15:30 (내 예약 확정 구간)
-              </div>
-              <div className="h-8 rounded bg-white shadow-xs flex items-center justify-center text-[11px] text-[#45474b] font-mono border border-[#e6e8ea]">
-                15:30
-              </div>
-              <div className="h-8 rounded bg-[#e0e3e5] flex items-center justify-center text-[11px] text-[#45474b]/70 font-mono">
-                16:00
-              </div>
-              <div className="h-8 rounded bg-white shadow-xs flex items-center justify-center text-[11px] text-[#45474b] font-mono border border-[#e6e8ea]">
-                16:30
+            {/* 30-min Block Grid Scrubber (Horizontal scroll on mobile) */}
+            <div className="overflow-x-auto pb-2 -mx-1 px-1 sm:mx-0 sm:px-0">
+              <div className="min-w-[580px] grid grid-cols-10 gap-1.5 w-full select-none">
+                <div className="h-8 rounded bg-[#e0e3e5] flex items-center justify-center text-[11px] text-[#45474b]/70 font-mono">
+                  12:00
+                </div>
+                <div className="h-8 rounded bg-[#e0e3e5] flex items-center justify-center text-[11px] text-[#45474b]/70 font-mono">
+                  12:30
+                </div>
+                <div className="h-8 rounded bg-white shadow-xs flex items-center justify-center text-[11px] text-[#45474b] font-mono border border-[#e6e8ea]">
+                  13:00
+                </div>
+                <div className="h-8 rounded bg-white shadow-xs flex items-center justify-center text-[11px] text-[#45474b] font-mono border border-[#e6e8ea]">
+                  13:30
+                </div>
+                <div className="h-8 rounded bg-[#02060e] text-white flex items-center justify-center text-[11px] font-bold shadow-md col-span-3">
+                  14:00 - 15:30 (내 예약 확정 구간)
+                </div>
+                <div className="h-8 rounded bg-white shadow-xs flex items-center justify-center text-[11px] text-[#45474b] font-mono border border-[#e6e8ea]">
+                  15:30
+                </div>
+                <div className="h-8 rounded bg-[#e0e3e5] flex items-center justify-center text-[11px] text-[#45474b]/70 font-mono">
+                  16:00
+                </div>
+                <div className="h-8 rounded bg-white shadow-xs flex items-center justify-center text-[11px] text-[#45474b] font-mono border border-[#e6e8ea]">
+                  16:30
+                </div>
               </div>
             </div>
           </div>

@@ -12,7 +12,7 @@ export const AssetsManagementView: React.FC<AssetsManagementViewProps> = ({
   onSelectResourceForBooking,
 }) => {
   return (
-    <div className="w-full px-8 py-6 max-w-7xl mx-auto flex flex-col gap-6">
+    <div className="w-full px-3 sm:px-6 md:px-8 py-4 sm:py-6 max-w-7xl mx-auto flex flex-col gap-5 sm:gap-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           {/* Breadcrumb & Title: Unified to '자산 예약' */}
@@ -21,7 +21,7 @@ export const AssetsManagementView: React.FC<AssetsManagementViewProps> = ({
             <span className="material-symbols-outlined text-[14px]">chevron_right</span>
             <span className="text-[#02060e] font-semibold text-xs">공용 비품 대여 신청</span>
           </div>
-          <h1 className="text-[28px] font-bold text-[#191c1e] tracking-tight mt-1">
+          <h1 className="text-[24px] sm:text-[28px] font-bold text-[#191c1e] tracking-tight mt-1">
             자산 예약
           </h1>
           <p className="text-xs text-[#45474b] mt-0.5">
@@ -32,7 +32,7 @@ export const AssetsManagementView: React.FC<AssetsManagementViewProps> = ({
         <button
           type="button"
           onClick={() => onSelectResourceForBooking(EQUIPMENT_ASSETS[0])}
-          className="flex items-center gap-2 px-4 py-2.5 bg-[#006c4a] hover:bg-[#00714e] text-white rounded-xl text-xs font-bold transition-all shadow-sm active:scale-95"
+          className="flex items-center justify-center gap-2 px-4 py-2.5 bg-[#006c4a] hover:bg-[#00714e] text-white rounded-xl text-xs font-bold transition-all shadow-sm active:scale-95 w-full sm:w-auto"
         >
           <span className="material-symbols-outlined text-[18px]">add_circle</span>
           <span>새 자산 대여 신청</span>

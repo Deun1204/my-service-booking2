@@ -26,10 +26,12 @@ import { MyBookingsView } from './components/MyBookingsView';
 import { AssetsManagementView } from './components/AssetsManagementView';
 import { BookingModal, CustomScheduleModal } from './components/BookingModal';
 import { CancelConfirmModal } from './components/CancelConfirmModal';
+import { MobileBottomNav } from './components/MobileBottomNav';
 
 export default function App() {
   const [currentView, setCurrentView] = useState<AppView>('dashboard');
   const [reservations, setReservations] = useState<Reservation[]>([]);
+  const [isMobileDrawerOpen, setIsMobileDrawerOpen] = useState(false);
   const [cancelModalTarget, setCancelModalTarget] = useState<{
     id: string;
     name: string;
@@ -374,15 +376,20 @@ export default function App() {
         </button>
       </div>
 
-      {/* Sidebar Navigation */}
+      {/* Sidebar Navigation (Desktop fixed + Mobile slide-over drawer) */}
       <Sidebar
         currentView={currentView}
-        onNavigate={(view) => setCurrentView(view)}
+        onNavigate={(view) => {
+          setCurrentView(view);
+          setIsMobileDrawerOpen(false);
+        }}
+        isMobileOpen={isMobileDrawerOpen}
+        onCloseMobile={() => setIsMobileDrawerOpen(false)}
       />
 
       {/* Main Content Area */}
-      <div className="pl-64 flex-1 flex flex-col min-h-screen">
-        {/* Top Navbar with Notification Center & Dynamic Red Dot */}
+      <div className="md:pl-64 pl-0 flex-1 flex flex-col min-h-screen w-full">
+        {/* Top Navbar with Notification Center, Responsive Hamburger & Red Dot */}
         <TopHeader
           currentView={currentView}
           onCopyLink={handleCopyLink}
@@ -391,10 +398,11 @@ export default function App() {
           onMarkAsRead={handleMarkAsRead}
           onMarkAllAsRead={handleMarkAllAsRead}
           onClearAllNotifications={handleClearAllNotifications}
+          onOpenMobileDrawer={() => setIsMobileDrawerOpen(true)}
         />
 
-        {/* Content View Router */}
-        <main className="relative pt-16 bg-[#f8f9fb] flex-1 pb-16">
+        {/* Content View Router with bottom padding for mobile bottom bar */}
+        <main className="relative pt-16 bg-[#f8f9fb] flex-1 pb-24 md:pb-16 w-full">
           {currentView === 'dashboard' && (
             <DashboardView
               onNavigate={(view) => setCurrentView(view)}
@@ -470,6 +478,13 @@ export default function App() {
           )}
         </main>
       </div>
+
+      {/* Mobile Bottom Navigation Bar (Visible only on portrait/mobile screens) */}
+      <MobileBottomNav
+        currentView={currentView}
+        onNavigate={(view) => setCurrentView(view)}
+        activeBookingsCount={reservations.filter((r) => r.status === 'in_progress' || r.status === 'reserved').length}
+      />
 
       {/* Modals from Screen 1 */}
       <BookingModal

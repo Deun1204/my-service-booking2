@@ -60,10 +60,10 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   };
 
   return (
-    <div className="flex flex-col w-full" style={{ maxWidth: 'calc(100% - 60px)', margin: '0 auto', zoom: 0.95 }}>
+    <div className="flex flex-col w-full max-w-7xl mx-auto px-3 sm:px-6 md:px-8 py-3 sm:py-6">
       {/* Top Control & Status Legend Bar */}
-      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-6">
-        <div className="flex items-center gap-4 flex-wrap">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-5 sm:mb-6">
+        <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
           <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#f2f4f6]">
             <span className="relative flex h-2.5 w-2.5">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#006c4a] opacity-75"></span>
@@ -71,27 +71,27 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             </span>
             <span className="text-[11px] font-semibold text-[#006c4a]">실시간 Firebase 동기화 ON</span>
             <span className="text-[#c5c6cb] text-[11px]">|</span>
-            <span className="text-[11px] text-[#45474b]">오늘 {new Date().getMonth() + 1}월 {new Date().getDate()}일 · 실시간 기준</span>
+            <span className="text-[11px] text-[#45474b]">오늘 {new Date().getMonth() + 1}월 {new Date().getDate()}일 기준</span>
           </div>
 
-          <div className="hidden sm:flex items-center gap-1 text-[#45474b] text-xs px-2">
+          <div className="hidden md:flex items-center gap-1 text-[#45474b] text-xs px-1">
             <span className="material-symbols-outlined text-[16px] text-[#006c4a]">flash_on</span>
             <span>로그인 없이 슬롯 터치 1초 즉시 점유</span>
           </div>
         </div>
 
         {/* 3-Color Status Legend */}
-        <div className="flex items-center gap-4 p-2 rounded-xl bg-[#f2f4f6] self-start lg:self-auto text-xs">
+        <div className="flex items-center gap-3 p-2 rounded-xl bg-[#f2f4f6] self-start sm:self-auto text-xs shrink-0">
           <div className="flex items-center gap-1.5">
-            <span className="w-3 h-3 rounded-full bg-white shadow-sm border border-[#e6e8ea]"></span>
+            <span className="w-2.5 h-2.5 rounded-full bg-white shadow-xs border border-[#e6e8ea]"></span>
             <span className="text-[11px] text-[#45474b] font-medium">사용 가능</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <span className="w-3 h-3 rounded-full bg-[#006c4a]"></span>
+            <span className="w-2.5 h-2.5 rounded-full bg-[#006c4a]"></span>
             <span className="text-[11px] text-[#006c4a] font-semibold">예약됨</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <span className="w-3 h-3 rounded-full bg-[#ba1a1a]"></span>
+            <span className="w-2.5 h-2.5 rounded-full bg-[#ba1a1a]"></span>
             <span className="text-[11px] text-[#ba1a1a] font-semibold">지금 쓰는 중</span>
           </div>
         </div>
@@ -120,25 +120,25 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             </div>
           </div>
 
-          {/* Filter Pills */}
-          <div className="flex items-center gap-1.5 bg-[#f2f4f6] p-1 rounded-xl self-start md:self-auto text-xs">
+          {/* Filter Pills with Horizontal Scroll on Mobile */}
+          <div className="flex items-center gap-1 bg-[#f2f4f6] p-1 rounded-xl self-start sm:self-auto text-xs overflow-x-auto max-w-full no-scrollbar shrink-0">
             <button
               type="button"
               onClick={() => setFilter('all')}
-              className={`px-3 py-1.5 rounded-lg font-semibold transition-all ${
+              className={`px-2.5 py-1.5 rounded-lg font-semibold transition-all whitespace-nowrap ${
                 filter === 'all'
-                  ? 'bg-white text-[#191c1e] shadow-sm'
+                  ? 'bg-white text-[#191c1e] shadow-xs'
                   : 'text-[#45474b] hover:text-[#191c1e]'
               }`}
             >
-              전체 진행 중 ({reservations.filter((r) => r.status !== 'cancelled' && r.status !== 'completed').length})
+              전체 ({reservations.filter((r) => r.status !== 'cancelled' && r.status !== 'completed').length})
             </button>
             <button
               type="button"
               onClick={() => setFilter('rooms')}
-              className={`px-3 py-1.5 rounded-lg font-semibold transition-all ${
+              className={`px-2.5 py-1.5 rounded-lg font-semibold transition-all whitespace-nowrap ${
                 filter === 'rooms'
-                  ? 'bg-white text-[#191c1e] shadow-sm'
+                  ? 'bg-white text-[#191c1e] shadow-xs'
                   : 'text-[#45474b] hover:text-[#191c1e]'
               }`}
             >
@@ -147,9 +147,9 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             <button
               type="button"
               onClick={() => setFilter('equipment')}
-              className={`px-3 py-1.5 rounded-lg font-semibold transition-all ${
+              className={`px-2.5 py-1.5 rounded-lg font-semibold transition-all whitespace-nowrap ${
                 filter === 'equipment'
-                  ? 'bg-white text-[#191c1e] shadow-sm'
+                  ? 'bg-white text-[#191c1e] shadow-xs'
                   : 'text-[#45474b] hover:text-[#191c1e]'
               }`}
             >
@@ -160,7 +160,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
 
         {/* Active Cards Grid */}
         {activeReservations.length === 0 ? (
-          <div className="p-8 bg-white rounded-2xl border border-[#e6e8ea] text-center flex flex-col items-center justify-center">
+          <div className="p-6 sm:p-8 bg-white rounded-2xl border border-[#e6e8ea] text-center flex flex-col items-center justify-center">
             <span className="material-symbols-outlined text-[32px] text-[#75777c] mb-2">event_available</span>
             <p className="text-sm font-bold text-[#191c1e]">현재 진행 중인 예약이 없습니다</p>
             <p className="text-xs text-[#45474b] mt-0.5">회의실이나 공용 비품을 신규 예약하여 일정을 점유해 보세요.</p>
@@ -173,7 +173,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
             {activeReservations.map((res) => {
               const startMin = timeToMinutes(res.startTime);
               const endMin = timeToMinutes(res.endTime);

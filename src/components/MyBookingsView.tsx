@@ -108,7 +108,7 @@ export const MyBookingsView: React.FC<MyBookingsViewProps> = ({
   });
 
   return (
-    <div className="w-full px-8 py-6 max-w-7xl mx-auto flex flex-col gap-6">
+    <div className="w-full px-3 sm:px-6 md:px-8 py-4 sm:py-6 max-w-7xl mx-auto flex flex-col gap-5 sm:gap-6">
       {/* Top Header & Breadcrumb */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
@@ -117,8 +117,8 @@ export const MyBookingsView: React.FC<MyBookingsViewProps> = ({
             <span className="material-symbols-outlined text-[14px]">chevron_right</span>
             <span className="text-[#02060e] font-semibold text-xs">신청 목록 관리</span>
           </div>
-          <div className="flex items-center gap-3 mt-1">
-            <h1 className="text-[28px] font-bold text-[#191c1e] tracking-tight">
+          <div className="flex items-center gap-3 mt-1 flex-wrap">
+            <h1 className="text-[24px] sm:text-[28px] font-bold text-[#191c1e] tracking-tight">
               내 예약 내역
             </h1>
             <span className="px-2.5 py-0.5 rounded-full bg-[#006c4a]/10 text-[#006c4a] text-xs font-semibold flex items-center gap-1">
@@ -134,59 +134,61 @@ export const MyBookingsView: React.FC<MyBookingsViewProps> = ({
         <button
           type="button"
           onClick={() => onNavigate('meeting-rooms')}
-          className="flex items-center gap-2 px-4 py-2.5 bg-[#006c4a] hover:bg-[#00714e] text-white rounded-xl text-xs font-bold transition-all shadow-sm active:scale-95"
+          className="flex items-center justify-center gap-2 px-4 py-2.5 bg-[#006c4a] hover:bg-[#00714e] text-white rounded-xl text-xs font-bold transition-all shadow-sm active:scale-95 w-full sm:w-auto"
         >
           <span className="material-symbols-outlined text-[18px]">add</span>
           <span>새 예약하기</span>
         </button>
       </div>
 
-      {/* Filter Tabs */}
-      <div className="flex items-center gap-2 bg-[#f2f4f6] p-1 rounded-xl self-start text-xs font-semibold">
-        <button
-          type="button"
-          onClick={() => setFilter('all')}
-          className={`px-3 py-1.5 rounded-lg transition-all ${
-            filter === 'all'
-              ? 'bg-white text-[#191c1e] shadow-xs'
-              : 'text-[#45474b] hover:text-[#191c1e]'
-          }`}
-        >
-          전체 유효 예약 ({reservations.filter((r) => r.status !== 'cancelled').length})
-        </button>
-        <button
-          type="button"
-          onClick={() => setFilter('in_progress')}
-          className={`px-3 py-1.5 rounded-lg transition-all ${
-            filter === 'in_progress'
-              ? 'bg-white text-[#191c1e] shadow-xs'
-              : 'text-[#45474b] hover:text-[#191c1e]'
-          }`}
-        >
-          지금 쓰는 중 ({reservations.filter((r) => getEffectiveStatus(r) === 'in_progress').length})
-        </button>
-        <button
-          type="button"
-          onClick={() => setFilter('reserved')}
-          className={`px-3 py-1.5 rounded-lg transition-all ${
-            filter === 'reserved'
-              ? 'bg-white text-[#191c1e] shadow-xs'
-              : 'text-[#45474b] hover:text-[#191c1e]'
-          }`}
-        >
-          예약됨 ({reservations.filter((r) => getEffectiveStatus(r) === 'reserved').length})
-        </button>
-        <button
-          type="button"
-          onClick={() => setFilter('ended')}
-          className={`px-3 py-1.5 rounded-lg transition-all ${
-            filter === 'ended'
-              ? 'bg-white text-[#191c1e] shadow-xs'
-              : 'text-[#45474b] hover:text-[#191c1e]'
-          }`}
-        >
-          완료 / 취소 ({reservations.filter((r) => r.status === 'completed' || r.status === 'cancelled').length})
-        </button>
+      {/* Filter Tabs (Horizontal scroll on mobile) */}
+      <div className="overflow-x-auto max-w-full pb-1 no-scrollbar">
+        <div className="inline-flex items-center gap-1.5 sm:gap-2 bg-[#f2f4f6] p-1 rounded-xl text-xs font-semibold shrink-0">
+          <button
+            type="button"
+            onClick={() => setFilter('all')}
+            className={`px-3 py-1.5 rounded-lg transition-all shrink-0 ${
+              filter === 'all'
+                ? 'bg-white text-[#191c1e] shadow-xs'
+                : 'text-[#45474b] hover:text-[#191c1e]'
+            }`}
+          >
+            전체 유효 ({reservations.filter((r) => r.status !== 'cancelled').length})
+          </button>
+          <button
+            type="button"
+            onClick={() => setFilter('in_progress')}
+            className={`px-3 py-1.5 rounded-lg transition-all shrink-0 ${
+              filter === 'in_progress'
+                ? 'bg-white text-[#191c1e] shadow-xs'
+                : 'text-[#45474b] hover:text-[#191c1e]'
+            }`}
+          >
+            지금 쓰는 중 ({reservations.filter((r) => getEffectiveStatus(r) === 'in_progress').length})
+          </button>
+          <button
+            type="button"
+            onClick={() => setFilter('reserved')}
+            className={`px-3 py-1.5 rounded-lg transition-all shrink-0 ${
+              filter === 'reserved'
+                ? 'bg-white text-[#191c1e] shadow-xs'
+                : 'text-[#45474b] hover:text-[#191c1e]'
+            }`}
+          >
+            예약됨 ({reservations.filter((r) => getEffectiveStatus(r) === 'reserved').length})
+          </button>
+          <button
+            type="button"
+            onClick={() => setFilter('ended')}
+            className={`px-3 py-1.5 rounded-lg transition-all shrink-0 ${
+              filter === 'ended'
+                ? 'bg-white text-[#191c1e] shadow-xs'
+                : 'text-[#45474b] hover:text-[#191c1e]'
+            }`}
+          >
+            완료 / 취소 ({reservations.filter((r) => r.status === 'completed' || r.status === 'cancelled').length})
+          </button>
+        </div>
       </div>
 
       {/* Bookings List */}
@@ -293,12 +295,12 @@ export const MyBookingsView: React.FC<MyBookingsViewProps> = ({
 
                 {/* Action Buttons: [+ 15분 연장], [취소], [퇴실 / 반납] */}
                 {effectiveStatus !== 'cancelled' && effectiveStatus !== 'completed' ? (
-                  <div className="flex items-center gap-2 shrink-0 flex-wrap">
+                  <div className="w-full md:w-auto flex items-center justify-between sm:justify-end gap-2 flex-wrap pt-3 md:pt-0 border-t md:border-t-0 border-[#f2f4f6]">
                     {/* 시간 연장 버튼 */}
                     <button
                       type="button"
                       onClick={() => onExtend(res.id, title)}
-                      className="px-3.5 py-2 rounded-xl bg-[#f2f4f6] hover:bg-[#e6e8ea] text-[#191c1e] text-xs font-semibold transition-all active:scale-95 flex items-center gap-1 border border-[#e6e8ea]"
+                      className="flex-1 sm:flex-initial px-3 py-2 rounded-xl bg-[#f2f4f6] hover:bg-[#e6e8ea] text-[#191c1e] text-xs font-semibold transition-all active:scale-95 flex items-center justify-center gap-1 border border-[#e6e8ea]"
                     >
                       <span className="material-symbols-outlined text-[15px] text-[#006c4a]">add</span>
                       <span>+ 15분 연장</span>
@@ -308,7 +310,7 @@ export const MyBookingsView: React.FC<MyBookingsViewProps> = ({
                     <button
                       type="button"
                       onClick={() => onCancel(res.id, title, `${res.startTime} ~ ${res.endTime}`)}
-                      className="px-3.5 py-2 rounded-xl bg-[#f2f4f6] hover:bg-[#ffdad6]/50 text-[#45474b] hover:text-[#ba1a1a] text-xs font-semibold transition-all active:scale-95 flex items-center gap-1 border border-[#e6e8ea]"
+                      className="flex-1 sm:flex-initial px-3 py-2 rounded-xl bg-[#f2f4f6] hover:bg-[#ffdad6]/50 text-[#45474b] hover:text-[#ba1a1a] text-xs font-semibold transition-all active:scale-95 flex items-center justify-center gap-1 border border-[#e6e8ea]"
                     >
                       <span className="material-symbols-outlined text-[15px]">close</span>
                       <span>취소</span>
@@ -318,7 +320,7 @@ export const MyBookingsView: React.FC<MyBookingsViewProps> = ({
                     <button
                       type="button"
                       onClick={() => onCheckOut(res.id, title)}
-                      className="px-3.5 py-2 rounded-xl bg-[#ffdad6]/60 hover:bg-[#ba1a1a] hover:text-white text-[#ba1a1a] text-xs font-semibold transition-all active:scale-95"
+                      className="flex-1 sm:flex-initial px-3 py-2 rounded-xl bg-[#ffdad6]/60 hover:bg-[#ba1a1a] hover:text-white text-[#ba1a1a] text-xs font-semibold transition-all active:scale-95 text-center"
                     >
                       퇴실 / 반납
                     </button>

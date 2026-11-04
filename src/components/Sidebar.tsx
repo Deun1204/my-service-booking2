@@ -4,29 +4,67 @@ import { AppView } from '../types';
 interface SidebarProps {
   currentView: AppView;
   onNavigate: (view: AppView) => void;
+  isMobileOpen?: boolean;
+  onCloseMobile?: () => void;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
   currentView,
   onNavigate,
+  isMobileOpen = false,
+  onCloseMobile,
 }) => {
+  const handleNav = (view: AppView) => {
+    onNavigate(view);
+    if (onCloseMobile) onCloseMobile();
+  };
+
   return (
-    <aside className="fixed left-0 top-0 h-full w-64 bg-[#ffffff] shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-50 flex flex-col justify-between border-r border-[#eceef0] select-none">
-      <div className="flex flex-col">
-        {/* Brand Header: Unified NextStep */}
-        <div className="h-16 px-6 flex items-center gap-2.5 border-b border-[#f2f4f6]">
-          <div className="w-8 h-8 rounded-lg bg-[#02060e] flex items-center justify-center text-white shrink-0">
-            <span className="material-symbols-outlined text-[18px]">corporate_fare</span>
+    <>
+      {/* Mobile Backdrop */}
+      {isMobileOpen && (
+        <div
+          className="fixed inset-0 bg-black/40 backdrop-blur-xs z-50 md:hidden animate-in fade-in duration-200"
+          onClick={onCloseMobile}
+        />
+      )}
+
+      <aside
+        className={`fixed left-0 top-0 h-full w-64 sm:w-72 md:w-64 bg-[#ffffff] shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-50 flex flex-col justify-between border-r border-[#eceef0] select-none transition-transform duration-300 ease-in-out ${
+          isMobileOpen
+            ? 'translate-x-0'
+            : '-translate-x-full md:translate-x-0'
+        }`}
+      >
+        <div className="flex flex-col">
+          {/* Brand Header: Unified NextStep */}
+          <div className="h-16 px-5 sm:px-6 flex items-center justify-between border-b border-[#f2f4f6]">
+            <div className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-lg bg-[#02060e] flex items-center justify-center text-white shrink-0">
+                <span className="material-symbols-outlined text-[18px]">corporate_fare</span>
+              </div>
+              <div className="flex flex-col">
+                <span className="font-bold text-[15px] text-[#02060e] leading-tight tracking-tight">
+                  NextStep
+                </span>
+                <span className="text-[11px] text-[#45474b] font-medium">
+                  공용 공간 · 자산 관리
+                </span>
+              </div>
+            </div>
+
+            {/* Close button on mobile */}
+            {onCloseMobile && (
+              <button
+                type="button"
+                onClick={onCloseMobile}
+                className="md:hidden w-8 h-8 rounded-lg flex items-center justify-center text-[#45474b] hover:bg-[#f2f4f6]"
+                aria-label="닫기"
+              >
+                <span className="material-symbols-outlined text-[20px]">close</span>
+              </button>
+            )}
           </div>
-          <div className="flex flex-col">
-            <span className="font-bold text-[15px] text-[#02060e] leading-tight tracking-tight">
-              NextStep
-            </span>
-            <span className="text-[11px] text-[#45474b] font-medium">
-              공용 공간 · 자산 관리
-            </span>
-          </div>
-        </div>
 
         {/* Menu Section Label */}
         <div className="px-4 py-2 mt-1">
@@ -40,7 +78,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           {/* Big Green Primary CTA: 새 예약하기 */}
           <button
             type="button"
-            onClick={() => onNavigate('meeting-rooms')}
+            onClick={() => handleNav('meeting-rooms')}
             className="w-full flex items-center justify-between px-4 py-3 my-1.5 rounded-xl bg-[#006c4a] text-white font-bold text-[15px] shadow-sm hover:bg-[#007a53] transition-all active:scale-[0.98]"
           >
             <div className="flex items-center gap-2">
@@ -53,7 +91,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           {/* 1. 대시보드 */}
           <button
             type="button"
-            onClick={() => onNavigate('dashboard')}
+            onClick={() => handleNav('dashboard')}
             className={`w-full flex items-center gap-2.5 px-4 py-2.5 rounded-lg text-xs font-semibold transition-all ${
               currentView === 'dashboard'
                 ? 'bg-[#191f28] text-white shadow-xs'
@@ -67,7 +105,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           {/* 2. 회의실 예약 */}
           <button
             type="button"
-            onClick={() => onNavigate('meeting-rooms')}
+            onClick={() => handleNav('meeting-rooms')}
             className={`w-full flex items-center gap-2.5 px-4 py-2.5 rounded-lg text-xs font-semibold transition-all ${
               currentView === 'meeting-rooms'
                 ? 'bg-[#191f28] text-white shadow-xs'
@@ -81,7 +119,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           {/* 3. 자산 예약 */}
           <button
             type="button"
-            onClick={() => onNavigate('assets')}
+            onClick={() => handleNav('assets')}
             className={`w-full flex items-center gap-2.5 px-4 py-2.5 rounded-lg text-xs font-semibold transition-all ${
               currentView === 'assets'
                 ? 'bg-[#191f28] text-white shadow-xs'
@@ -95,7 +133,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           {/* 4. 내 예약 내역 */}
           <button
             type="button"
-            onClick={() => onNavigate('my-bookings')}
+            onClick={() => handleNav('my-bookings')}
             className={`w-full flex items-center gap-2.5 px-4 py-2.5 rounded-lg text-xs font-semibold transition-all ${
               currentView === 'my-bookings' || currentView === 'confirmed'
                 ? 'bg-[#191f28] text-white shadow-xs'
@@ -124,5 +162,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
         </div>
       </div>
     </aside>
+    </>
   );
 };
