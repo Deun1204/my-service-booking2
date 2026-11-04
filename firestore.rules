@@ -1,0 +1,49 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Global deny catch-all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isValidReservation(data) {
+      return data.keys().hasAll(['resourceId', 'resourceName', 'date', 'startTime', 'endTime', 'status', 'createdAt'])
+        && data.keys().hasOnly(['id', 'resourceId', 'resourceName', 'location', 'date', 'startTime', 'endTime', 'purpose', 'userName', 'userDept', 'status', 'createdAt', 'updatedAt'])
+        && data.resourceId is string && data.resourceId.size() <= 64
+        && data.resourceName is string && data.resourceName.size() <= 100
+        && (!('location' in data) || (data.location is string && data.location.size() <= 100))
+        && data.date is string && data.date.size() <= 30
+        && data.startTime is string && data.startTime.size() <= 10
+        && data.endTime is string && data.endTime.size() <= 10
+        && (!('purpose' in data) || (data.purpose is string && data.purpose.size() <= 200))
+        && (!('userName' in data) || (data.userName is string && data.userName.size() <= 50))
+        && (!('userDept' in data) || (data.userDept is string && data.userDept.size() <= 50))
+        && data.status in ['in_progress', 'reserved', 'completed', 'cancelled']
+        && data.createdAt is string && data.createdAt.size() <= 50
+        && (!('updatedAt' in data) || (data.updatedAt is string && data.updatedAt.size() <= 50));
+    }
+
+    // Reservations Collection: Accessible for company internal booking board
+    match /reservations/{reservationId} {
+      allow get, list: if true;
+      allow create: if isValidId(reservationId) && isValidReservation(incoming());
+      allow update: if isValidId(reservationId)
+                    && isValidReservation(incoming())
+                    && incoming().diff(existing()).affectedKeys().hasOnly(['status', 'endTime', 'updatedAt', 'purpose', 'startTime']);
+      allow delete: if isValidId(reservationId);
+    }
+  }
+}

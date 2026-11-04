@@ -1,0 +1,204 @@
+---
+name: Resource Scheduler
+colors:
+  surface: '#f8f9fb'
+  surface-dim: '#d8dadc'
+  surface-bright: '#f8f9fb'
+  surface-container-lowest: '#ffffff'
+  surface-container-low: '#f2f4f6'
+  surface-container: '#eceef0'
+  surface-container-high: '#e6e8ea'
+  surface-container-highest: '#e0e3e5'
+  on-surface: '#191c1e'
+  on-surface-variant: '#45474b'
+  inverse-surface: '#2d3133'
+  inverse-on-surface: '#eff1f3'
+  outline: '#75777c'
+  outline-variant: '#c5c6cb'
+  surface-tint: '#595f69'
+  primary: '#02060e'
+  on-primary: '#ffffff'
+  primary-container: '#191f28'
+  on-primary-container: '#818792'
+  inverse-primary: '#c1c7d3'
+  secondary: '#006c4a'
+  on-secondary: '#ffffff'
+  secondary-container: '#82f5c1'
+  on-secondary-container: '#00714e'
+  tertiary: '#150002'
+  on-tertiary: '#ffffff'
+  tertiary-container: '#46000e'
+  on-tertiary-container: '#fc3559'
+  error: '#ba1a1a'
+  on-error: '#ffffff'
+  error-container: '#ffdad6'
+  on-error-container: '#93000a'
+  primary-fixed: '#dde3ef'
+  primary-fixed-dim: '#c1c7d3'
+  on-primary-fixed: '#161c25'
+  on-primary-fixed-variant: '#414751'
+  secondary-fixed: '#85f8c4'
+  secondary-fixed-dim: '#68dba9'
+  on-secondary-fixed: '#002114'
+  on-secondary-fixed-variant: '#005137'
+  tertiary-fixed: '#ffdada'
+  tertiary-fixed-dim: '#ffb3b6'
+  on-tertiary-fixed: '#40000c'
+  on-tertiary-fixed-variant: '#920028'
+  background: '#f8f9fb'
+  on-background: '#191c1e'
+  surface-variant: '#e0e3e5'
+typography:
+  headline-lg:
+    fontFamily: Inter
+    fontSize: 32px
+    fontWeight: '700'
+    lineHeight: 40px
+    letterSpacing: -0.03em
+  headline-lg-mobile:
+    fontFamily: Inter
+    fontSize: 26px
+    fontWeight: '700'
+    lineHeight: 34px
+    letterSpacing: -0.025em
+  headline-md:
+    fontFamily: Inter
+    fontSize: 20px
+    fontWeight: '600'
+    lineHeight: 28px
+    letterSpacing: -0.02em
+  headline-sm:
+    fontFamily: Inter
+    fontSize: 17px
+    fontWeight: '600'
+    lineHeight: 24px
+    letterSpacing: -0.015em
+  body-lg:
+    fontFamily: Inter
+    fontSize: 16px
+    fontWeight: '400'
+    lineHeight: 24px
+    letterSpacing: -0.01em
+  body-md:
+    fontFamily: Inter
+    fontSize: 15px
+    fontWeight: '400'
+    lineHeight: 22px
+    letterSpacing: -0.01em
+  body-sm:
+    fontFamily: Inter
+    fontSize: 13px
+    fontWeight: '400'
+    lineHeight: 18px
+    letterSpacing: 0em
+  label-lg:
+    fontFamily: Inter
+    fontSize: 15px
+    fontWeight: '600'
+    lineHeight: 20px
+    letterSpacing: -0.01em
+  label-md:
+    fontFamily: Inter
+    fontSize: 13px
+    fontWeight: '600'
+    lineHeight: 18px
+    letterSpacing: 0em
+  label-sm:
+    fontFamily: Inter
+    fontSize: 11px
+    fontWeight: '600'
+    lineHeight: 14px
+    letterSpacing: 0.02em
+rounded:
+  sm: 0.25rem
+  DEFAULT: 0.5rem
+  md: 0.75rem
+  lg: 1rem
+  xl: 1.5rem
+  full: 9999px
+spacing:
+  gutter: 0.75rem
+  margin: 1rem
+  space-xs: 0.25rem
+  space-sm: 0.5rem
+  space-md: 1rem
+  space-lg: 1.5rem
+  space-xl: 2rem
+---
+
+## Brand & Style
+
+This design system embodies the razor-sharp, frictionless efficiency of modern Korean fintech and productivity tools (such as Toss and Linear). Tailored for agile internal startup workflows, it prioritizes immediate cognitive clarity, instant tactile feedback, and rapid task completion over ornamental decoration.
+
+The visual tone is hyper-minimal, functional, and decisive. Typography carries the visual weight, while micro-interactions deliver subtle physical confirmation. The emotional goal is zero-overhead execution: a coworker booking a standing desk, focus booth, or camera rig in under three seconds with zero friction.
+
+## Colors
+
+The palette revolves around a neutral slate-gray canvas punctuated by crisp structural containers and three high-contrast semantic indicators:
+
+- **Surface Neutral (`#F2F4F6`)**: The global viewport canvas, establishing low-fatigue structural framing.
+- **Card Neutral (`#FFFFFF`)**: Pure white card surfaces providing immediate elevation and division against the slate base.
+- **Text & Primary Action (`#191F28`)**: Deep obsidian-slate for maximum typographic readability and authoritative primary confirmations.
+- **Subtle Gray (`#8B95A1`)**: Supporting text, secondary labels, and dormant timeline dividers.
+- **Available (`#FFFFFF` with `#E5E8EB` border)**: Crisp, neutral open space indicating ready-to-book availability.
+- **Reserved / Upcoming (`#059669` / `#ECFDF5`)**: Emerald forest green for secured, verified upcoming reservations.
+- **In Use Right Now (`#E11D48` / `#FFF1F2`)**: Crimson coral for real-time occupancy, demanding immediate recognition without sensory alarm.
+
+## Typography
+
+Inter serves as the primary system typeface (substituting Pretendard with identical grotesque metrics and neutral neutrality). Tracking is set with tight negative letter spacing on larger headings to produce the distinctive density characteristic of modern Korean software interfaces.
+
+All numeric elements (such as time slots, hour counters, and dates) must utilize tabular numbers (`font-variant-numeric: tabular-nums`) to prevent horizontal jitter during interactive timeline scrubbing and schedule toggling.
+
+## Layout & Spacing
+
+Designed as a mobile-first web interface with an explicit maximum view constraint:
+
+- **Mobile Viewport**: Full width fluid container with standard outer margins of `1rem` (16px) and interior card gutters of `0.75rem` (12px).
+- **Tablet / Desktop Wrapper**: The application centers inside a fixed max-width shell of `460px` to maintain focused single-thumb ergonomic reach. On wide screens, the surrounding desktop space defaults to `#E5E8EB`.
+- **Vertical Rhythm**: Built upon a strict 4px/8px micro-grid. Touch targets are strictly maintained at a minimum height of 48px to eliminate mis-taps during movement.
+- **Horizontal Time Grid**: The schedule scrubber scrolls horizontally with sticky resource name anchors, featuring snap-alignment to 30-minute block boundaries.
+
+## Elevation & Depth
+
+Visual hierarchy uses flat, high-clarity surface containment and surgical micro-shadows rather than ambient multi-layered skeuomorphism:
+
+- **Base Canvas**: Flat `#F2F4F6` background.
+- **Containers & Cards**: Solid `#FFFFFF` surfaces paired with a crisp 1px border (`#E5E8EB`) and a subtle downward micro-drop: `0 1px 3px rgba(0, 0, 0, 0.04)`.
+- **Bottom Sheets & Modal Overlays**: Positioned above a backdrop scrim of `rgba(0, 0, 0, 0.45)` with `backdrop-filter: blur(4px)`. Sheet panels feature an elevated shadow: `0 -8px 24px rgba(0, 0, 0, 0.08)`.
+- **Active / Pressed State**: Depresses slightly using a transform scale (`scale(0.98)`) and an opacity shift (`0.92`), mimicking native Korean mobile app responsiveness.
+
+## Shapes
+
+The interface balances soft geometry with structured density:
+
+- **Base Radius (0.5rem / 8px)**: Inputs, segmented chips, timeline segment cells, and small status tags.
+- **Card & Dialog Radius (1rem / 16px)**: Resource listing cards, interactive modals, and floating action bars.
+- **Bottom Sheet Sheet Radius (1.25rem / 20px)**: The top boundary of the time-selection bottom sheet.
+- **Pill Elements (`rounded-full`)**: Semantic status dots, active time capsule pills, and quick user identifier avatars.
+
+## Components
+
+### Buttons
+- **Primary Action**: Solid `#191F28` background with `#FFFFFF` text. Height of 52px on mobile screens, full card-width with `font-weight: 600`.
+- **Secondary / Ghost**: `#F2F4F6` background with `#333D4B` text, 0px border, scaling down subtly when tapped.
+- **Status Fast-Action**: Compact contextual trigger (e.g., "지금 30분 쓰기") adopting the immediate state color for one-tap extension.
+
+### Cards (Resource Items)
+- Pure white background (`#FFFFFF`), `16px` border-radius, padded with `16px`.
+- Layout: Top header displays the resource moniker (e.g., "Focus Room A", "Sony A7M4 Kit") on the left, alongside a semantic status pill on the right. Below the header sits the horizontal timeline preview.
+
+### Semantic Status Badges
+- **Available (사용 가능)**: White pill, 1px solid `#E5E8EB`, `#4E5968` text, neutral dot indicator.
+- **Reserved (예약됨)**: Pale green fill (`#ECFDF5`), `#059669` text, solid emerald green dot.
+- **In Use (지금 쓰는 중)**: Pale coral fill (`#FFF1F2`), `#E11D48` text, pulsing crimson dot indicator.
+
+### Horizontal Timeline Track
+- Divided into uniform 30-minute block nodes.
+- Unreserved blocks remain solid white with crisp separator borders.
+- Reserved and In-Use segments display continuous blocks tinted in their respective semantic colors.
+- Scrubbing across an empty slot dynamically highlights the selection range in `#191F28` with white time markers.
+
+### Quick Reservation Bottom Sheet (No Login)
+- Slides up from the viewport bottom with rounded top corners (20px).
+- Includes an auto-focused single input for internal name or Slack handle (`@name`), preset duration pills (`15분`, `30분`, `1시간`), and a full-width confirmation CTA.
